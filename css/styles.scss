@@ -1,0 +1,35 @@
+.content-title {
+    font-size: 150%
+}
+
+.post-title {
+    text-align: center;
+}
+
+.post-font {
+    font-family: 'Fira Code', STKaiti, monospace;   
+}
+
+.post {
+    margin: 0% 14%;
+    padding: 2% 8% 4% 8%;
+    border: 1px solid LightGrey;
+}
+
+span.post-date {
+    float: right;
+}
+
+p.post-date {
+    text-align: right;
+    color: cadetblue;
+}
+
+main {
+    padding-top: 100px;
+}
+
+li.list-group-item :hover {
+    color: grey;
+    text-decoration: none;
+}
