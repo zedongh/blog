@@ -15,10 +15,12 @@
 }
 
 .post {
-    margin: 0% 14%;
+    margin: 0% 0%;
     padding: 2% 8% 4% 8%;
     border: 1px solid LightGrey;
-    box-shadow: 5px 5px 3px grey;
+}
+.post:hover {
+    box-shadow: 1px 5px 5px 3px grey;
 }
 
 span.post-date {
@@ -37,4 +39,14 @@ main {
 li.list-group-item :hover {
     color: grey;
     text-decoration: none;
+}
+figure > img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    //width: 50%;
+}
+figure > figcaption {
+    text-align: center;
+    color: darksalmon;
 }
