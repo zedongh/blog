@@ -1,0 +1,7 @@
+digraph structs {
+    node [shape=record];
+    struct1 [label="{{|||}|int len|in struct}|{{|||||||}|{<pointer> char buf[]}|out of range of struct}" color="red"];
+    //struct2 [label="{{||<m>||||||||}|{memory}}"]
+    //struct2 [label="{{|||}|int len}|{{}|{buf}}"];
+    //struct1:pointer -> struct2:m
+}
