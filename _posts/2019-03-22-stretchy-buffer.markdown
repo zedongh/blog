@@ -2,6 +2,7 @@
 layout: post
 title:  "Stretchy Buffer"
 categories: c programming-language
+date: 2019-03-22 11:39:31
 ---
 
 ---
