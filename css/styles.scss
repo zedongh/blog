@@ -14,11 +14,17 @@
     font-family: 'Fira Code', STKaiti, monospace;   
 }
 
-.post .comment {
-    margin: 0% 0%;
+.post {
+    margin: 2% 2%;
     padding: 2% 8% 4% 8%;
     border: 1px solid LightGrey;
 }
+
+.comment {
+    margin: 2% 2%;
+    padding: 2% 8% 4% 8%;
+}
+
 .post:hover {
     box-shadow: 1px 5px 5px 3px grey;
 }
