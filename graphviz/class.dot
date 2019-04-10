@@ -1,0 +1,3 @@
+digraph G {
+    magic [shape=record,label="{{CA|FE|BA|BE}|magic number} | {{00|00}|minor version=0}|{{00|34}|major version=52}"];
+}
