@@ -345,19 +345,19 @@ abstract class Visitor<R> {
     R visit(Expr e) {
         return e.accept(this);
     }
-    abstract int visit(Add e);
-    abstract int visit(Sub e);
-    abstract int visit(Lit e);
+    abstract R visit(Add e);
+    abstract R visit(Sub e);
+    abstract R visit(Lit e);
 }
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;那么`Eval`和`Depth`就是`Visitor<Integer>`, 而`Print`就是`Visitor<Void>`了，那么如果不同的类型的表达式返回的结果不同呢？方法需要额外参数呢？这些问题就留给读者自己思考了。
 
-## 6. Conclusion & Thinking
+## 5. Conclusion & Thinking
 
 &nbsp;&nbsp;&nbsp;&nbsp;这里介绍了设计模式中相对比较难懂的`Visitor Pattern`, 本质上是因为`Java`等语言中缺少`Pattern Match`方便的手段，但是`Visitor Pattern`和`Pattern Match`之间并非等价关系。`Visitor`采用的是面向对象的设计，更具有可组合性，比`Pattern Match`更加灵活方便，在代码复用方面可以通过继承轻松实现。如果想详细了解`Visitor`演绎可以阅读`a litte java, a few pattern`[3].
 
 
-## 5. Reference
+## 6. Reference
 [1] [https://en.wikipedia.org/wiki/Static_dispatch](https://en.wikipedia.org/wiki/Static_dispatch)
 
 [2] [https://en.wikipedia.org/wiki/Dynamic_dispatch](https://en.wikipedia.org/wiki/Dynamic_dispatch)
