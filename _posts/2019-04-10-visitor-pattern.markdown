@@ -108,10 +108,14 @@ static void print(Lit e) {
     System.out.println("Lit");
 }
 
-Expr expr = new Lit(2);
-print(expr);
+Expr expr1 = new Lit(2);
+print(expr1);
+Lit expr2 = new Lit(2);
+print(expr2);
+Sub expr3 = new Lit(2);
+print(expr3);
 ```
-&nbsp;&nbsp;&nbsp;&nbsp;虽然e的实际类型是Lit类型，但是静态类型是Expr类型，最终会打印“Expr”，这也就是为何上面的方法行不通。那就换个思路把方法塞到`class`里面呢？
+&nbsp;&nbsp;&nbsp;&nbsp;虽然expr1的实际类型是Lit类型，但是静态类型是Expr类型，实际调用的是`print(Expr)`最终会打印“Expr”，expr2的静态类型是Lit,实际上两个函数都可以调用，但是选择类型更加精确的，也就是`print(Lit)`，打印“Lit”，expr3的静态类型是Sub，由于没有`print(Sub)`，调用的是`print(Expr)`。这也就是为何上面的方法行不通。那就换个思路把方法塞到`class`里面呢？
 ```java
 abstract class Expr {
     abstract void print() {
@@ -217,11 +221,8 @@ class Lit {
         return eval.eval(this); // this will call eval(Lit expr)
     }
 }
-//注意！！！再改动Eval, 继续使用eval还是会造成静态分派的问题，通过accept实现动态分派
+
 class Eval {
-    int eval(Expr e) {
-        return e.accept(this);
-    }
     int eval(Add e) {
         return e.e1.accept(this) + e.e2.accept(this);
     }
@@ -233,6 +234,24 @@ class Eval {
     }
 }
 ```
+&nbsp;&nbsp;&nbsp;&nbsp;为了少点`.accept(this)`, 只需要一点小小的改变：
+```java
+class Eval {
+    int eval(Expr e) {
+        e.accept(this); // using dynamic dispath
+    }
+    int eval(Add e) {
+        return eval(e.e1) + eval(e.e2); // those eval both call on eval(Expr)
+    }
+    int eval(Sub e) {
+        return eval(e.e1) - eval(e.e2);  // those eval both call on eval(Expr)
+    }
+    int eval(Lit e) { // basic case
+        return e.i;
+    }
+}
+```
+
 &nbsp;&nbsp;&nbsp;&nbsp;这样的好处究竟在哪里呢？当增加一种数据类型只需要实现相应的接口，然后在Eval中实现相应的eval方法就行了，那么增加方法呢？以depth为例，只用实现一个class继承Eval即可：
 ```java
 class Depth extends Eval {
@@ -302,7 +321,57 @@ abstract class Visitor {
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;剩下的只需要Eval和Depth继承Visitor实现就行了。
 
-## 4. Generic and More ...
+## 4. Compile-Time Error
+
+&nbsp;&nbsp;&nbsp;&nbsp;由于为了少写点`.accept(this)`, 增加了`visit(Expr)`的方法，虽然实现我们想要的功能，同时也带来了新的问题，原本的缺少`visit(Expr)`方法方式，在增加新的数据类型，如果没有在`Visitor`接口添加相应的`visit(Type)`的抽象方法，编译器会在编译期报错，但是当添加了`visit(Expr)`，当编译器找不到确切的`visit(Type)`就会调用该方法造成死循环，一种可行解决办法是避免重载，改写签名来规避类型的问题：
+```java
+abstract class Expr {
+    abstract int accept(Visitor visitor);
+}
+class Add {
+    Expr e1;
+    Expr e2;
+    Add(Expr e1, Expr e2) {
+        this.e1 = e1;
+        this.e2 = e2;
+    }
+    @Override int accept(Visitor visitor) {
+        return visitor.visitAdd(this);
+    }
+}
+class Sub {
+    Expr e1;
+    Expr e2;
+    Sub(Expr e1, Expr e2) {
+        this.e1 = e1;
+        this.e2 = e2;
+    }
+    @Override int accept(Visitor visitor) {
+        return visitor.visitSub(this); 
+    }
+}
+class Lit {
+    int i;
+    Lit(int i) {
+        this.i = i;
+    }
+    @Override int accept(Visitor visitor) {
+        return visitor.visitLit(this);
+    }
+}
+
+abstract class Visitor {
+    int visitExpr(Expr e) {
+        return e.accept(this);
+    }
+    abstract int visitAdd(Add e); // when recursive call, just call visitExpr is fine
+    abstract int visitSub(Sub e); // when recursive call, just call visitExpr is fine
+    abstract int visitLit(Lit e); // when recursive call, just call visitExpr is fine
+}
+```
+&nbsp;&nbsp;&nbsp;&nbsp;不过这样的实现显得不够一致整齐，个人不是很喜欢这种风格...
+
+## 5. Generic and More ...
 
 &nbsp;&nbsp;&nbsp;&nbsp;可能有人要问了，这里的depth和eval类型签名是一样的，算是投机取巧了，但是print返回的void，不能实现这个visitor了吧！这里第一种办法就是为Expr实现具有不同返回值Visitor满足你的不同需求，如IntVisitor，VoidVisitor。为了实现代码的通用性，第二种办法那就需要借助Generic：
 ```java
@@ -352,12 +421,12 @@ abstract class Visitor<R> {
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;那么`Eval`和`Depth`就是`Visitor<Integer>`, 而`Print`就是`Visitor<Void>`了，那么如果不同的类型的表达式返回的结果不同呢？方法需要额外参数呢？这些问题就留给读者自己思考了。
 
-## 5. Conclusion & Thinking
+## 6. Conclusion & Thinking
 
-&nbsp;&nbsp;&nbsp;&nbsp;这里介绍了设计模式中相对比较难懂的`Visitor Pattern`, 本质上是因为`Java`等语言中缺少`Pattern Match`方便的手段，但是`Visitor Pattern`和`Pattern Match`之间并非等价关系。`Visitor`采用的是面向对象的设计，更具有可组合性，比`Pattern Match`更加灵活方便，在代码复用方面可以通过继承轻松实现。如果想详细了解`Visitor`演绎可以阅读`a litte java, a few pattern`[3].
+&nbsp;&nbsp;&nbsp;&nbsp;这里介绍了设计模式中相对比较难懂的`Visitor Pattern`, 本质上是因为`Java`等语言中缺少`Pattern Match`方便的手段，但是`Visitor Pattern`和`Pattern Match`之间并非等价关系。`Visitor`采用的是面向对象的设计，更具有可组合性，递归调用的时候`.accpet(this)`中可以切换成别的`Visitor`，如`sub.e1.accept(new Depth())`，这样一来`Visitor`比`Pattern Match`更加灵活方便，而且在代码复用方面可以通过继承轻松实现。如果想详细了解`Visitor`演绎可以阅读《a litte java, a few pattern》[3].
 
 
-## 6. Reference
+## 7. Reference
 [1] [https://en.wikipedia.org/wiki/Static_dispatch](https://en.wikipedia.org/wiki/Static_dispatch)
 
 [2] [https://en.wikipedia.org/wiki/Dynamic_dispatch](https://en.wikipedia.org/wiki/Dynamic_dispatch)
