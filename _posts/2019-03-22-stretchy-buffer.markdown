@@ -133,7 +133,7 @@ typedef struct Buffer {
         if (index >= buf->len) { \
             exit(1); \ 
         } \
-        return buf->buf[index] \
+        return buf->buf[index]; \
     } \
     \
     void Type##BufferClear(Type##Buffer *buf) { \
