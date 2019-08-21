@@ -278,20 +278,20 @@ expr : <assoc=right> expr '^' expr    #pow
 &nbsp;&nbsp;&nbsp;&nbsp;这样就可以选择重载`visitPow`，`visitMul`替换前面的`if else`的判断：
 ```java
 // Interpreter.java
-import com.demo.parser.CalcultorBaseVisitor;
-import com.demo.parser.CalcultorParser;
+import com.demo.parser.CalculatorBaseVisitor;
+import com.demo.parser.CalculatorParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-public class Interpreter extends CalcultorBaseVisitor<Integer> {
+public class Interpreter extends CalculatorBaseVisitor<Integer> {
 
     @Override
-    public Integer visitCompileUnit(CalcultorParser.CompileUnitContext ctx) {
+    public Integer visitCompileUnit(CalculatorParser.CompileUnitContext ctx) {
         ParseTree expr = ctx.getChild(0);
         return expr.accept(this);
     }
 
     @Override
-    public Integer visitPow(CalcultorParser.PowContext ctx) {
+    public Integer visitPow(CalculatorParser.PowContext ctx) {
         ParseTree exprL = ctx.getChild(0);
         ParseTree exprR = ctx.getChild(2);
         Integer left = exprL.accept(this);
@@ -300,25 +300,35 @@ public class Interpreter extends CalcultorBaseVisitor<Integer> {
     }
 
     @Override
-    public Integer visitMul(CalcultorParser.MulContext ctx) {
+    public Integer visitMul(CalculatorParser.MulContext ctx) {
         ParseTree exprL = ctx.getChild(0);
+        String op = ctx.getChild(1).getText();
         ParseTree exprR = ctx.getChild(2);
         Integer left = exprL.accept(this);
         Integer right = exprR.accept(this);
-        return left * right;
+        if ("*".equals(op)) {
+            return left * right;
+        } else {
+            return left / right;  // ignore some detail here 
+        }
     }
 
     @Override
-    public Integer visitAdd(CalcultorParser.AddContext ctx) {
+    public Integer visitAdd(CalculatorParser.AddContext ctx) {
         ParseTree exprL = ctx.getChild(0);
+        String op = ctx.getChild(1).getText();
         ParseTree exprR = ctx.getChild(2);
         Integer left = exprL.accept(this);
         Integer right = exprR.accept(this);
-        return left + right;
+        if ("+".equals(op)) {
+            return left + right;
+        } else {
+            return left - right;
+        }
     }
 
     @Override
-    public Integer visitInt(CalcultorParser.IntContext ctx) {
+    public Integer visitInt(CalculatorParser.IntContext ctx) {
         return Integer.valueOf(ctx.getText());
     }
 }
@@ -326,7 +336,7 @@ public class Interpreter extends CalcultorBaseVisitor<Integer> {
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;完成`Calculator`所需要的全部ANTLR4知识已经足够了，剩下的工作就是完成文法的定义了。
 ```antlr4
-grammar Calcultor; // 必须与文件名字一致
+grammar Calculator; // 必须与文件名字一致
 
 // 这是注释
 
@@ -350,20 +360,20 @@ SPACES : [ \r\t\n] -> skip;  // 配置空格， 用skip指示空格跳过
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;以及最后的`Interpreter.java`:
 ```java
-import com.demo.parser.CalcultorBaseVisitor;
-import com.demo.parser.CalcultorParser;
+import com.demo.parser.CalculatorBaseVisitor;
+import com.demo.parser.CalculatorParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-public class Interpreter extends CalcultorBaseVisitor<Double> {
+public class Interpreter extends CalculatorBaseVisitor<Double> {
 
     @Override
-    public Double visitCompileUnit(CalcultorParser.CompileUnitContext ctx) {
+    public Double visitCompileUnit(CalculatorParser.CompileUnitContext ctx) {
         ParseTree expr = ctx.getChild(0);
         return expr.accept(this);
     }
 
     @Override
-    public Double visitPow(CalcultorParser.PowContext ctx) {
+    public Double visitPow(CalculatorParser.PowContext ctx) {
         ParseTree exprL = ctx.getChild(0);
         ParseTree exprR = ctx.getChild(2);
         Double left = exprL.accept(this);
@@ -372,41 +382,51 @@ public class Interpreter extends CalcultorBaseVisitor<Double> {
     }
 
     @Override
-    public Double visitMul(CalcultorParser.MulContext ctx) {
+    public Double visitMul(CalculatorParser.MulContext ctx) {
         ParseTree exprL = ctx.getChild(0);
+        String op = ctx.getChild(1).getText();
         ParseTree exprR = ctx.getChild(2);
         Double left = exprL.accept(this);
         Double right = exprR.accept(this);
-        return left * right;
+        if ("*".equals(op)) {
+            return left * right;
+        } else {
+            return left / right;
+        }
     }
 
     @Override
-    public Double visitAdd(CalcultorParser.AddContext ctx) {
+    public Double visitAdd(CalculatorParser.AddContext ctx) {
         ParseTree exprL = ctx.getChild(0);
+        String op = ctx.getChild(1).getText();
         ParseTree exprR = ctx.getChild(2);
         Double left = exprL.accept(this);
         Double right = exprR.accept(this);
-        return left + right;
+        if ("+".equals(op)) {
+            return left + right;
+        } else {
+            return left - right;
+        }
     }
 
     @Override
-    public Double visitInt(CalcultorParser.IntContext ctx) {
+    public Double visitInt(CalculatorParser.IntContext ctx) {
         return Integer.valueOf(ctx.getText()).doubleValue();
     }
 
     @Override
-    public Double visitDouble(CalcultorParser.DoubleContext ctx) {
+    public Double visitDouble(CalculatorParser.DoubleContext ctx) {
         return Double.valueOf(ctx.getText());
     }
 
     @Override
-    public Double visitParen(CalcultorParser.ParenContext ctx) {
+    public Double visitParen(CalculatorParser.ParenContext ctx) {
         ParseTree expr = ctx.getChild(1);
         return expr.accept(this);
     }
 
     @Override
-    public Double visitUnary(CalcultorParser.UnaryContext ctx) {
+    public Double visitUnary(CalculatorParser.UnaryContext ctx) {
         String unaryOp = ctx.getChild(0).getText();
         ParseTree expr = ctx.getChild(1);
         Double val = expr.accept(this);
