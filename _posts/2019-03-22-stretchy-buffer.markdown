@@ -29,11 +29,11 @@ date: 2019-03-22 11:39:31
 
 &nbsp;&nbsp;&nbsp;&nbsp;两种定义的差别在于`buf`用指针还是数组。在C语言中数组和指针是两个相近的概念，《C与指针》中指出一定程度上数组的指针的语法糖，当然两者的并非等价，使用方式也天差地别，这里不做详细讨论，先看上述两种`struct`在内存的布局情况：
 <figure class="image">
-  <img src="{{site.url}}{{site.baseurl}}/images/struct1.svg" alt="struct definition 1">
+  <img src="{{site.baseurl}}/images/struct1.svg" alt="struct definition 1">
   <figcaption>第一种struct内存布局</figcaption>
 </figure>
 <figure class="image">
-  <img src="{{site.url}}{{site.baseurl}}/images/struct2.svg" alt="struct definition 2">
+  <img src="{{site.baseurl}}/images/struct2.svg" alt="struct definition 2">
   <figcaption>第二种struct内存布局</figcaption>
 </figure>
 &nbsp;&nbsp;&nbsp;&nbsp;第一种定义的`buf`与`struct`本身处于内存的两个部分，第二种定义`struct`的`buf`乍看没有占据内存，试图访问`buf`实际上是访问`struct`占据的内存之后的地方，可以说是越界访问，这里有个`tricky`，可以通过内存分配时，给`struct`分配的额外的内存存储数据，继而通过利用`buf`越界访问，这就是`stretchy buffer`或者[`flexible array member`](https://en.wikipedia.org/wiki/Flexible_array_member)<sup>1</sup>。比较下可以发现，后者的定义比前者的定义内存上更加集中紧凑，同时也可以发现`stretchy buffer`的`buf`如果不在`strcut`的最后一个`field`，那么就没有意义了。

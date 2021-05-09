@@ -4,7 +4,7 @@ title:  "Java Class File"
 categories: java jvm
 ---
 
-# 1. Java虚拟机
+# 1. Java虚拟机111
 
 &nbsp;&nbsp;&nbsp;&nbsp;学习Java语言那么久，一直都没有去学习Java虚拟机（Java Virtual Machine，JVM），一方面是觉得基础还是不够扎实，另一方面是觉得虚拟机方面的知识用不上。最近，编程语言方面学习了很多，终于开始涉及虚拟机方面的内容，结合Java虚拟机和Lua虚拟机，窥探虚拟机。
 

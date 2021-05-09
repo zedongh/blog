@@ -1,0 +1,41 @@
+---
+layout: post
+title: Leetcode 1. Two Sum
+categories: leetcode n-sum hashmap
+date: 2021-05-09 12:30 +0800
+---
+## 1. 问题 
+
+[two sum](https://leetcode.com/problems/two-sum/)，给定数组`nums`和目标值`target`，找出数组中两个元素和为`target`的下标。
+  
+
+## 2. 解答
+
+### 2.1 分析
+
+遍历数组同时记录元素对应的下标映射关系`M`，对每个元素`e`，在M中查找是否存在`target - e`，需要遍历数组，最坏情况下时间复杂度 $O(n)$, 使用映射关系表，即空间复杂度 $O(n)$。
+
+### 2.2 代码
+
+```java
+// java
+import java.util.Map;
+import java.util.HashMap;
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> val2Index = new HashMap<>();
+        for (int i = 0; i < nums.length; i ++) {
+            if (val2Index.containsKey(target - nums[i])) {
+                return new int[]{val2Index.get(target - nums[i]) , i};
+            }
+            else {
+                val2Index.put(nums[i], i);
+            }
+        }
+        return null;
+    }
+}
+
+```
+

@@ -6,7 +6,7 @@ date: 2020-09-26 00:12:00 +0000
 ---
 
 <figure class="image">
-  <img src="{{site.url}}{{site.baseurl}}/images/compile.png" alt="preprocessing compilation assembly and linking">
+  <img src="{{site.baseurl}}/images/compile.png" alt="preprocessing compilation assembly and linking">
   <figcaption>preprocessing compilation assembly and linking</figcaption>
 </figure>
 

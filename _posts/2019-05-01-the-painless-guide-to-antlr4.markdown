@@ -113,7 +113,7 @@ SPACES : [ \r\t\n] -> skip;  // 空格， 用skip指示空格跳过
 &nbsp;&nbsp;&nbsp;&nbsp;这时候可以利用前面已经安装了IDEA的`ANTLR v4 Grammar Plugin`来测试刚才定义的grammar， 鼠标放在`compileUnit`，右键，选择`Test Rule compileUnit`, 当然也可以选择测试其他的rule:
 
 <figure class="image">
-  <img src="{{site.url}}{{site.baseurl}}/images/antlr4plugin.png" alt="test rule compileUnit">
+  <img src="{{site.baseurl}}/images/antlr4plugin.png" alt="test rule compileUnit">
   <figcaption>test rule compileUnit</figcaption>
 </figure>
 
@@ -123,7 +123,7 @@ SPACES : [ \r\t\n] -> skip;  // 空格， 用skip指示空格跳过
 &nbsp;&nbsp;&nbsp;&nbsp;测试Grammar完成后，确定下功能，就需要根据`Calculator.g4`生成相应的java文件。这就需要依靠之前配置的`maven`的`build`的`plugin`, 只需要点击`antlr4:antlr4`即可，或者使用命令行`mvn antlr4:antlr4`:
 
 <figure class="image">
-  <img src="{{site.url}}{{site.baseurl}}/images/antlr4antlr4.png" alt="mvn antlr4:antlr4">
+  <img src="{{site.baseurl}}/images/antlr4antlr4.png" alt="mvn antlr4:antlr4">
   <figcaption>antlr4:antlr4</figcaption>
 </figure>
 
@@ -166,7 +166,7 @@ public class Main {
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;启动这个`main`函数一个简单的Parser就完成了，可以随意的改变`ANTLRInputStream`的参数，体会不同的字符串的结果，同时这里也可以传递文件名，输入流等等。
 ### 5. Interpreter
-&nbsp;&nbsp;&nbsp;&nbsp;`Calculator`的功能当然不仅仅只应该是识别而已，还要负责计算出表达式的结果。计算表达式的结果不过是一次树的遍历，仅此而已！这里使用Visitor模式实现，可以参考我前面的[Visitor Pattern]({{site.url}}{{site.baseurl}}/gof23/java/2019/04/10/visitor-pattern.html)一文。只需要继承之前生成的`BaseVisitor`文件，在`java`目录下创建`Interpreter.java`文件，代码简单易懂，不再赘述：
+&nbsp;&nbsp;&nbsp;&nbsp;`Calculator`的功能当然不仅仅只应该是识别而已，还要负责计算出表达式的结果。计算表达式的结果不过是一次树的遍历，仅此而已！这里使用Visitor模式实现，可以参考我前面的[Visitor Pattern]({{site.baseurl}}/gof23/java/2019/04/10/visitor-pattern.html)一文。只需要继承之前生成的`BaseVisitor`文件，在`java`目录下创建`Interpreter.java`文件，代码简单易懂，不再赘述：
 ```java
 import com.demo.parser.CalculatorBaseVisitor;
 import com.demo.parser.CalculatorParser;
