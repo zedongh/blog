@@ -13,6 +13,11 @@ date: 2021-05-09 23:50 +0800
 
 列举出几轮样列，观察数据的规律：可以得到位于同一行中，竖直方向的位置的下标位置的间隔都是相同，为$\Delta = 2 * (\\# rows - 1)$，从第二行到倒数第二行，两个竖直方向元素之间还插入一个元素，可以轻易得到该元素与左边紧邻元素相差$\Delta　=　2 * (\\# rows - r - 1)$, 其中`r`为第几行（下标０开始）。
 
+<figure class="image">
+  <img src="{{site.baseurl}}/images/zigzag-conversion.svg" alt="zigzag conversion">
+  <figcaption>ZigZag样例</figcaption>
+</figure>
+
 根据上述的观察，即可以按行，依次计算得到元素的下标位置。
 
 - 时间复杂度：虽然按行计算每个下标，实际上仅仅对字符串每个元素仅仅遍历一次，空间复杂度为O(n)
