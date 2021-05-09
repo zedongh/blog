@@ -6,17 +6,17 @@ categories: java jvm
 
 # 1. Java虚拟机111
 
-&nbsp;&nbsp;&nbsp;&nbsp;学习Java语言那么久，一直都没有去学习Java虚拟机（Java Virtual Machine，JVM），一方面是觉得基础还是不够扎实，另一方面是觉得虚拟机方面的知识用不上。最近，编程语言方面学习了很多，终于开始涉及虚拟机方面的内容，结合Java虚拟机和Lua虚拟机，窥探虚拟机。
+学习Java语言那么久，一直都没有去学习Java虚拟机（Java Virtual Machine，JVM），一方面是觉得基础还是不够扎实，另一方面是觉得虚拟机方面的知识用不上。最近，编程语言方面学习了很多，终于开始涉及虚拟机方面的内容，结合Java虚拟机和Lua虚拟机，窥探虚拟机。
 
 # 2. Java虚拟机规范
 
-&nbsp;&nbsp;&nbsp;&nbsp;Java虚拟机规范<sup>[1]</sup>
+Java虚拟机规范<sup>[1]</sup>
 
 ## 2.1 字节码文件格式
 
-&nbsp;&nbsp;&nbsp;&nbsp;`.java`文件编译成`.class`文件，本质上是将文本形式的Java代码变成更加紧凑的二进制格式字节码文件（bytecode file）。字节码文件格式遵从Java Virtual Machine Specification中的定义，如同网络协议一样。
+`.java`文件编译成`.class`文件，本质上是将文本形式的Java代码变成更加紧凑的二进制格式字节码文件（bytecode file）。字节码文件格式遵从Java Virtual Machine Specification中的定义，如同网络协议一样。
 
-&nbsp;&nbsp;&nbsp;&nbsp;例如：
+例如：
 
 {% highlight java %}
 // HelloWorld.java
@@ -27,7 +27,7 @@ public class HelloWorld {
 }
 {% endhighlight %}
 
-&nbsp;&nbsp;&nbsp;&nbsp;编译成`HelloWorld.class`文件，可以利用查看其二进制：
+编译成`HelloWorld.class`文件，可以利用查看其二进制：
 
 TODO
 
@@ -60,7 +60,7 @@ TODO
 
 ## 2.2 Instruction Set
 
-&nbsp;&nbsp;&nbsp;&nbsp;Java虚拟机采用的是堆栈机，非等长指令集，这里不得不提下指令集。
+Java虚拟机采用的是堆栈机，非等长指令集，这里不得不提下指令集。
 
 寄存器机与堆栈机器
 等长指令集与非等长指令集

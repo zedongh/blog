@@ -11,7 +11,7 @@ date: 2019-03-22 11:39:31
 
 ---
 
-&nbsp;&nbsp;&nbsp;&nbsp;先来看两个类似的`struct`的定义
+先来看两个类似的`struct`的定义
 1. 
     ```c
     typedef struct Buf {
@@ -27,7 +27,7 @@ date: 2019-03-22 11:39:31
     }
     ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;两种定义的差别在于`buf`用指针还是数组。在C语言中数组和指针是两个相近的概念，《C与指针》中指出一定程度上数组的指针的语法糖，当然两者的并非等价，使用方式也天差地别，这里不做详细讨论，先看上述两种`struct`在内存的布局情况：
+两种定义的差别在于`buf`用指针还是数组。在C语言中数组和指针是两个相近的概念，《C与指针》中指出一定程度上数组的指针的语法糖，当然两者的并非等价，使用方式也天差地别，这里不做详细讨论，先看上述两种`struct`在内存的布局情况：
 <figure class="image">
   <img src="{{site.baseurl}}/images/struct1.svg" alt="struct definition 1">
   <figcaption>第一种struct内存布局</figcaption>
@@ -36,7 +36,7 @@ date: 2019-03-22 11:39:31
   <img src="{{site.baseurl}}/images/struct2.svg" alt="struct definition 2">
   <figcaption>第二种struct内存布局</figcaption>
 </figure>
-&nbsp;&nbsp;&nbsp;&nbsp;第一种定义的`buf`与`struct`本身处于内存的两个部分，第二种定义`struct`的`buf`乍看没有占据内存，试图访问`buf`实际上是访问`struct`占据的内存之后的地方，可以说是越界访问，这里有个`tricky`，可以通过内存分配时，给`struct`分配的额外的内存存储数据，继而通过利用`buf`越界访问，这就是`stretchy buffer`或者[`flexible array member`](https://en.wikipedia.org/wiki/Flexible_array_member)<sup>1</sup>。比较下可以发现，后者的定义比前者的定义内存上更加集中紧凑，同时也可以发现`stretchy buffer`的`buf`如果不在`strcut`的最后一个`field`，那么就没有意义了。
+第一种定义的`buf`与`struct`本身处于内存的两个部分，第二种定义`struct`的`buf`乍看没有占据内存，试图访问`buf`实际上是访问`struct`占据的内存之后的地方，可以说是越界访问，这里有个`tricky`，可以通过内存分配时，给`struct`分配的额外的内存存储数据，继而通过利用`buf`越界访问，这就是`stretchy buffer`或者[`flexible array member`](https://en.wikipedia.org/wiki/Flexible_array_member)<sup>1</sup>。比较下可以发现，后者的定义比前者的定义内存上更加集中紧凑，同时也可以发现`stretchy buffer`的`buf`如果不在`strcut`的最后一个`field`，那么就没有意义了。
 
 ---
 
@@ -44,7 +44,7 @@ date: 2019-03-22 11:39:31
 
 ---
 
-&nbsp;&nbsp;&nbsp;&nbsp;两种`struct`内存结构的不同，导致使用上的些许差别，这里不考虑`struct`本身分配在`stack`上的情况，只考虑在动态内存分配下的使用，毕竟`stretchy buffer`在`stack`上是无法体现优势的。
+两种`struct`内存结构的不同，导致使用上的些许差别，这里不考虑`struct`本身分配在`stack`上的情况，只考虑在动态内存分配下的使用，毕竟`stretchy buffer`在`stack`上是无法体现优势的。
 1. 
     ```c 
     // for buffer initialize
@@ -99,7 +99,7 @@ date: 2019-03-22 11:39:31
 
     ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;通过上述的例子，可以看出几乎完全相同的元素访问代码，但是`stretchy buffer`的内存管理工作比普通方式下定义的`struct`简单很多。
+通过上述的例子，可以看出几乎完全相同的元素访问代码，但是`stretchy buffer`的内存管理工作比普通方式下定义的`struct`简单很多。
 
 
 ---
@@ -108,7 +108,7 @@ date: 2019-03-22 11:39:31
 
 ---
 
-&nbsp;&nbsp;&nbsp;&nbsp;当Buffer中存储的数据类型越来越复杂，可以简单做如下的修改：
+当Buffer中存储的数据类型越来越复杂，可以简单做如下的修改：
 ```c
 typedef struct Buffer {
     size_t len;
@@ -149,7 +149,7 @@ typedef struct Buffer {
 DEFINE_BUFFER(char)
 DEFINE_BUFFER(uint32);
 ```
-&nbsp;&nbsp;&nbsp;&nbsp;当然我们也可以利用相同的方式定义`stretchy buffer`，但是这里不再描述，而是介绍一种不同的实现方式。
+当然我们也可以利用相同的方式定义`stretchy buffer`，但是这里不再描述，而是介绍一种不同的实现方式。
 
 ---
 
@@ -157,7 +157,7 @@ DEFINE_BUFFER(uint32);
 
 ---
 
-&nbsp;&nbsp;&nbsp;&nbsp;目标聚集在`Buffer`的`buf`字段，内存分配完毕后，并不直接返回整个`Buffer`的指针，仅仅返回`buf`的地址，即`(char *) malloc(...) + offset_size_to_buf`。而类型信息通过外部传入，即`Type *buf = (Type *)((char *) malloc(...) + offset_size_to_buf)`。这样想来，一个清晰的实现方式就出来了，这里给出了一个较为完整的实现：
+目标聚集在`Buffer`的`buf`字段，内存分配完毕后，并不直接返回整个`Buffer`的指针，仅仅返回`buf`的地址，即`(char *) malloc(...) + offset_size_to_buf`。而类型信息通过外部传入，即`Type *buf = (Type *)((char *) malloc(...) + offset_size_to_buf)`。这样想来，一个清晰的实现方式就出来了，这里给出了一个较为完整的实现：
 
 ```c
 #include<stdlib.h>

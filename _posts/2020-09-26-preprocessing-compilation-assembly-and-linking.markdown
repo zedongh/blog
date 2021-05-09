@@ -18,11 +18,11 @@ $ ./a.out
 max: 3.141593, add: 5.859874, sub: 0.423311, mul: 8.539734, div: 1.155727
 {% endhighlight %}
 
-&nbsp;&nbsp;&nbsp;&nbsp;这一行命令涉及到的流程包括：预处理、编译、汇编和链接，最后生成可执行的文件。
+这一行命令涉及到的流程包括：预处理、编译、汇编和链接，最后生成可执行的文件。
 
 # II. Preprocessing
 
-&nbsp;&nbsp;&nbsp;&nbsp;预处理(preprocessing)是c语言整个编译流程的第一个阶段，将源代码(Source Code)处理成翻译单元(Translation Unit)。C语言代码中以‘#’开头是预处理指令, 这里是一个完整的包含了一些简单的预处理指令的C项目工程(`arith.h`, `add.c`, `mul.c`, `main.c`):
+预处理(preprocessing)是c语言整个编译流程的第一个阶段，将源代码(Source Code)处理成翻译单元(Translation Unit)。C语言代码中以‘#’开头是预处理指令, 这里是一个完整的包含了一些简单的预处理指令的C项目工程(`arith.h`, `add.c`, `mul.c`, `main.c`):
 
 * `arith.h`是算数库头文件，声明了`add`, `sub`, `mul`以及`div`四个函数。
 {% highlight c %}
@@ -80,13 +80,13 @@ int main(int argc, char const *argv[])
 }
 {% endhighlight %}
 
-&nbsp;&nbsp;&nbsp;&nbsp;为了手动模拟GCC编译器的第一步处理，使用`cpp`命令可以对工程的每个`.c`文件进行预处理：
+为了手动模拟GCC编译器的第一步处理，使用`cpp`命令可以对工程的每个`.c`文件进行预处理：
 {% highlight bash %}
 $ cpp add.c -c add1.c
 $ cpp mul.c -c mul1.c
 $ cpp main.c -c main1.c
 {% endhighlight %}
-&nbsp;&nbsp;&nbsp;&nbsp;为了看得更加清楚中间发生了什么，这里列出每个文件的预处理后的输出，由于`#include<stdio.h>`太长，省略了`main.c`的预处理输出部分片段。
+为了看得更加清楚中间发生了什么，这里列出每个文件的预处理后的输出，由于`#include<stdio.h>`太长，省略了`main.c`的预处理输出部分片段。
 * `add1.c`
 
 {% highlight c %}
@@ -170,13 +170,13 @@ int main(int argc, char const *argv[])
 }
 {% endhighlight %}
 
-&nbsp;&nbsp;&nbsp;&nbsp;可以看出，使用`#include`包含的头文件，在预处理阶段会将其中的内容预处理后包含进入处理结果中，`#define`的常量和宏会替换源文件中对应出现的地方。
+可以看出，使用`#include`包含的头文件，在预处理阶段会将其中的内容预处理后包含进入处理结果中，`#define`的常量和宏会替换源文件中对应出现的地方。
 
-&nbsp;&nbsp;&nbsp;&nbsp;值得一提的是，条件编译`#ifndef`，`#ifdef`需要根据一些预定义判断条件选择处理分支，也可以通过命令行`-D`显示指定条件影响预处理流程：
+值得一提的是，条件编译`#ifndef`，`#ifdef`需要根据一些预定义判断条件选择处理分支，也可以通过命令行`-D`显示指定条件影响预处理流程：
 {% highlight bash %}
 $ cpp main.c -D E=2 -o main2.c
 {% endhighlight %}
-&nbsp;&nbsp;&nbsp;&nbsp;通过命令行显式定义`E`，影响`ifndef E`条件，进而影响预处理的结果：
+通过命令行显式定义`E`，影响`ifndef E`条件，进而影响预处理的结果：
 {% highlight c %}
 ...
 # 4 "main.c" 2
@@ -189,19 +189,19 @@ int main(int argc, char const *argv[])
 }
 {% endhighlight %}
 
-&nbsp;&nbsp;&nbsp;&nbsp;处理后的结果中以‘#’开后的行，类似于注释的作用，不再是预处理指令。
+处理后的结果中以‘#’开后的行，类似于注释的作用，不再是预处理指令。
 
 > gcc -E pipeline1.c  # 同样也可以看到预处理后结果
 
 # III. Compilation
 
-&nbsp;&nbsp;&nbsp;&nbsp;经过预处理器得到的翻译单元(pipeline2.c)作为编译的输入，得到相应的汇编代码。通过gcc的`-S`选项，会生成对应的`.s`后缀(pipeline2.s)的汇编代码。
+经过预处理器得到的翻译单元(pipeline2.c)作为编译的输入，得到相应的汇编代码。通过gcc的`-S`选项，会生成对应的`.s`后缀(pipeline2.s)的汇编代码。
 {% highlight bash %}
 $ gcc -S add1.c
 $ gcc -S mul1.c
 $ gcc -S main1.c
 {% endhighlight %}
-&nbsp;&nbsp;&nbsp;&nbsp;编译器解析翻译单元，将其翻译成目标架构平台的汇编代码
+编译器解析翻译单元，将其翻译成目标架构平台的汇编代码
 * `add1.s`
 {% highlight asm %}
 	.file	"add1.c"
@@ -425,7 +425,7 @@ main:
 
 # IV. Assembly
 
-&nbsp;&nbsp;&nbsp;&nbsp;流程的下一个处理阶段是汇编器——根据上一步处理的汇编代码(pipeline2.s)生成机器指令（机器码），通常将包含这样的机器指令的文件称为目标文件(Object File)。
+流程的下一个处理阶段是汇编器——根据上一步处理的汇编代码(pipeline2.s)生成机器指令（机器码），通常将包含这样的机器指令的文件称为目标文件(Object File)。
 
 {% highlight bash %}
 $ as add1.s -o add.o
@@ -433,7 +433,7 @@ $ as mul1.s -o mul.o
 $ as main1.s -o main.o
 {% endhighlight %}
 
-&nbsp;&nbsp;&nbsp;&nbsp;可重定位目标文件是二进制文件，Linux下有很多方便的工具查看其中的内容信息。
+可重定位目标文件是二进制文件，Linux下有很多方便的工具查看其中的内容信息。
 
 * 使用`nm`查看目标文件中的符号表
 
@@ -454,7 +454,7 @@ $ nm main1.o
                  U sub
 {% endhighlight %}
 
-&nbsp;&nbsp;&nbsp;&nbsp;可以看到`nm`的输出中`main.o`，存在未定义的符号
+可以看到`nm`的输出中`main.o`，存在未定义的符号
 
 * 除了可以使用`nm`也可以使用`readelf`命令查看 
 
@@ -631,7 +631,7 @@ Disassembly of section .text:
 
 # V. Linking
 
-&nbsp;&nbsp;&nbsp;&nbsp;上一个阶段的输出目标文件中，存在一些符号没有解决，这时候就是链接任务了，链接是通过ld命令，将多个文件
+上一个阶段的输出目标文件中，存在一些符号没有解决，这时候就是链接任务了，链接是通过ld命令，将多个文件
 
 {% highlight bash %}
 $ ld main1.o
@@ -644,7 +644,7 @@ ld: main1.c:(.text+0x92): undefined reference to `add'
 ld: main1.c:(.text+0xc2): undefined reference to `printf'
 {% endhighlight %}
 
-&nbsp;&nbsp;&nbsp;&nbsp;既然提示未定义的引用`div`, `mul`说明链接缺少这一部分，而我们知道这些符号在`mul.o`中，尝试吧`mul.o`添加到`ld`命令中：
+既然提示未定义的引用`div`, `mul`说明链接缺少这一部分，而我们知道这些符号在`mul.o`中，尝试吧`mul.o`添加到`ld`命令中：
 
 {% highlight bash %}
 $ ld main1.o mul1.o 
@@ -655,7 +655,7 @@ ld: main1.c:(.text+0x92): undefined reference to `add'
 ld: main1.c:(.text+0xc2): undefined reference to `printf'
 {% endhighlight %}
 
-&nbsp;&nbsp;&nbsp;&nbsp;未定义的符号引用减少了，说明思路对了，尝试向命令中继续添加`add1.o`，减少未定义的引用`sub`, `add`的报错。
+未定义的符号引用减少了，说明思路对了，尝试向命令中继续添加`add1.o`，减少未定义的引用`sub`, `add`的报错。
 
 {% highlight bash %}
 $ ld main1.o mul1.o add1.o
@@ -664,7 +664,7 @@ ld: main1.o: in function `main':
 main1.c:(.text+0xc2): undefined reference to `printf'
 {% endhighlight %}
 
-&nbsp;&nbsp;&nbsp;&nbsp;`printf`是C标准库的函数，为了解决相关符号引用，主函数入口等错误，可以使用`gcc`完成最后链接工作
+`printf`是C标准库的函数，为了解决相关符号引用，主函数入口等错误，可以使用`gcc`完成最后链接工作
 
 {% highlight bash %}
 $ gcc main1.o mul1.o add1.o
@@ -674,7 +674,7 @@ max: 3.141593, add: 5.859874, sub: 0.423311, mul: 8.539734, div: 1.155727
 
 ## 1. 静态链接库(Static Linker Library)
 
-&nbsp;&nbsp;&nbsp;&nbsp;静态链接库不过是一堆目标文件的归档打包。这里可以将`mul.o`, `add.o`组成基本四则算数库打包成静态链接库：
+静态链接库不过是一堆目标文件的归档打包。这里可以将`mul.o`, `add.o`组成基本四则算数库打包成静态链接库：
 
 * 创建基本算数静态链接库`libarithmetic.a`
 
@@ -700,7 +700,7 @@ max: 3.141593, add: 5.859874, sub: 0.423311, mul: 8.539734, div: 1.155727
 
 ## 2. 动态链接库(Dynamic Linker Library)
 
-&nbsp;&nbsp;&nbsp;&nbsp;当有多个程序依赖于同一个库的时候，使用静态链接库的方式要求每个程序都需要链接该静态库，最后的可执行文件都包含了相同的库部分，在空间上造成浪费的同时给程序维护和升级造成不便。此时使用动态链接库可以帮助解决这样的问题。动态链接库又称共享库，`gcc`提供`-shared`选项创建动态链接库，需要先将依赖库的代码编译成位置无关机器码(Position-independent code, PIC)：
+当有多个程序依赖于同一个库的时候，使用静态链接库的方式要求每个程序都需要链接该静态库，最后的可执行文件都包含了相同的库部分，在空间上造成浪费的同时给程序维护和升级造成不便。此时使用动态链接库可以帮助解决这样的问题。动态链接库又称共享库，`gcc`提供`-shared`选项创建动态链接库，需要先将依赖库的代码编译成位置无关机器码(Position-independent code, PIC)：
 
 {% highlight bash %}
 $ gcc -c add1.c -fPIC -o add2.o                        # -fPIC
@@ -710,7 +710,7 @@ $ rm -rv /opt/arithmetic/ libarithmetic.a              # 删除之前的静态�
 $ mv libarithmetic.so /opt/arithmetic
 {% endhighlight %}
 
-&nbsp;&nbsp;&nbsp;&nbsp;链接的时候与链接静态链接库的命令一样：
+链接的时候与链接静态链接库的命令一样：
 
 {% highlight bash %}
 $ gcc main1.o -larithmetic -L/opt/arithmetic
@@ -718,7 +718,7 @@ $ ./a.out
 ./a.out: error while loading shared libraries: libarithmetic.so: cannot open shared object file: No such file or directory
 {% endhighlight %}
 
-&nbsp;&nbsp;&nbsp;&nbsp;链接虽然成功了，但是加载运行的时候报`libarithmetic.so`没有找到的错误，这里不同于静态链接，静态链接后的产出的可执行文件是可以独立加载执行，不需要指定任何依赖；而动态链接后产出的可执行文件加载运行依赖于动态链接库，需要指定链接库的位置——可以通过环境变量`LD_LIBRARY_PATH`显式指定：
+链接虽然成功了，但是加载运行的时候报`libarithmetic.so`没有找到的错误，这里不同于静态链接，静态链接后的产出的可执行文件是可以独立加载执行，不需要指定任何依赖；而动态链接后产出的可执行文件加载运行依赖于动态链接库，需要指定链接库的位置——可以通过环境变量`LD_LIBRARY_PATH`显式指定：
 {% highlight bash %}
 $ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/arithmetic
 $ ./a.out
