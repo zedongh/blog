@@ -2,6 +2,7 @@
 layout: post
 title: Leetcode 6. ZigZag Conversion
 date: 2021-05-09 23:50 +0800
+categories: leetcode
 ---
 ## 1. 问题
 
