@@ -1,12 +1,12 @@
 ---
 layout: post
-title: Leetcode 3. longest substring without repeating characters
+title: Leetcode 3. Longest Substring Without Repeating Characters
 date: 2021-05-09 14:41 +0800
 categories: leetcode
 ---
 # 1. 问题
 
-[longest substring without repeating characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/submissions/)，获取给定字符串最长无重复子串的长度。
+[longest substring without repeating characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/)，获取给定字符串最长无重复子串的长度。
 
 # 2. 解答
 
