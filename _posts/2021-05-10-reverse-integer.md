@@ -16,11 +16,12 @@ categories: leetcode
 
 ## 2.1.1 算法分析
 
-1. Math.abs: -123, 123 => 123, 需要注意Math.abs(-2147483648) == -2147483648.
-2. toString 
-3. reverse
-4. parseLong: 前导0自动处理　parseLong("0012") == 12
-5. check overflow: Integer.MAX_VALUE, Integer.MIN_VALUE
+输入处理：
+1. Math.abs: -123, 123 => 123, 需要注意$Math.abs\(-2147483648\) = -2147483648$.
+2. toString: 数字转字符串 
+3. reverse: 字符串对称翻转
+4. parseLong: 前导0自动处理　$parseLong\("0012"\) == 12$
+5. overflow检查: Integer.MAX_VALUE, Integer.MIN_VALUE
 
 ## 2.2.2 代码实现
 ```java
