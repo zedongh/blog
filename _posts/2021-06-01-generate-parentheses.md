@@ -64,14 +64,15 @@ n = 4
 (()()()) ()()()()
 </pre>
 
-递归算法：(拓展了n=0的情况)
+- 递归算法：(拓展了n=0的情况)
+
 $$
-gen\_paren(n) = 
+gen\_paren(n) =
 \begin{cases}
 \{""\}, n = 0, \\ 
 \{"()"\}, \ n = 1, \\
 \{ concat("(", x, ")", y) | x \in gen\_paren(i-1), y \in gen\_paren(n-i), i \in \{1...n-1\} \} \  \cup \ \\ 
-\ \ \ \ \{ concat("(", x, ")") | x \in gen\_paren(n-1) \}, n > 1,
+\ \ \ \ \{ concat("(", x, ")") | x \in gen\_paren(n-1) \}, n > 1
 \end{cases}
 $$
 
