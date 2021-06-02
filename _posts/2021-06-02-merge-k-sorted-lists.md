@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Merge k Sorted Lists
+title: Leetcode 23. Merge k Sorted Lists
 categories: leetcode heap priority-queue
 date: 2021-06-02 09:52 +0800
 ---
