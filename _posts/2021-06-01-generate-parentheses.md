@@ -120,7 +120,7 @@ class Solution {
 ### 2.3 非暴力解法
 
 递归解法重复计算了许多子问题，如果做`memo`，空间复杂度会很高，考虑使用回溯的方式。
-回溯解法需要借助状态变量记录状态，回溯的时候恢复状态
+回溯解法需要借助状态变量记录状态，回溯的时候恢复状态。
 
 ### 2.4 回溯实现
 ```java
@@ -153,6 +153,57 @@ class Solution {
             sb.append(')');
             dfs(n, sb, open, close + 1, result);
             sb.deleteCharAt(sb.length() - 1); // remove ')'
+        }
+    }
+}
+```
+
+## 3. 算法拓展
+
+生成括号不再局限于单一种类，可以是$()$[]{}。
+
+### 3.1 回溯实现
+```java
+// java
+import java.util.List;
+import java.util.ArrayList;
+
+
+class Solution {
+
+    private static char[] lparens = { '(', '[', '{' };
+    private static char[] rparens = { ')', ']', '}' };
+
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        Stack<Integer> stack = new Stack<>();
+        // result record final result parentheses
+        // sb for backtracking state store
+        dfs(n, sb, 0, stack, result);
+        return result;
+    }
+
+    private void dfs(int n, StringBuilder sb, int open, Stack<Integer> stack, List<String> result) {
+        if (sb.length() == n * 2) {
+           result.add(sb.toString());
+           return; 
+        }
+        if (open < n) {
+            for (int i = 0; i < lparens.length; i++) {
+                sb.append(lparens[i]);
+                stack.push(i);
+                dfs(n, sb, open + 1, stack, result);
+                stack.pop();
+                sb.deleteCharAt(sb.length() - 1); // remove '('
+            }
+        }
+        if (!stack.isEmpty()) {
+            int i = stack.pop();
+            sb.append(rparens[i]);
+            dfs(n, sb, open, stack, result);
+            sb.deleteCharAt(sb.length() - 1); // remove ')'
+            stack.push(i);
         }
     }
 }
